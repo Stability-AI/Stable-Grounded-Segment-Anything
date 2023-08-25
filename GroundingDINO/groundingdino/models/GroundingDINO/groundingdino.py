@@ -72,6 +72,7 @@ class GroundingDINO(nn.Module):
         dn_label_noise_ratio=0.5,
         dn_labelbook_size=100,
         text_encoder_type="bert-base-uncased",
+        text_encoder_path=None,
         sub_sentence_present=True,
         max_text_len=256,
     ):
@@ -105,7 +106,10 @@ class GroundingDINO(nn.Module):
 
         # bert
         self.tokenizer = get_tokenlizer.get_tokenlizer(text_encoder_type)
-        self.bert = get_tokenlizer.get_pretrained_language_model(text_encoder_type)
+        if text_encoder_path is not None:
+            self.bert = BertModel.from_pretrained(text_encoder_path)
+        else:
+            self.bert = get_tokenlizer.get_pretrained_language_model(text_encoder_type)
         self.bert.pooler.dense.weight.requires_grad_(False)
         self.bert.pooler.dense.bias.requires_grad_(False)
         self.bert = BertModelWarper(bert_model=self.bert)
@@ -388,6 +392,7 @@ def build_groundingdino(args):
         dn_label_noise_ratio=args.dn_label_noise_ratio,
         dn_labelbook_size=dn_labelbook_size,
         text_encoder_type=args.text_encoder_type,
+        text_encoder_path=args.text_encoder_path,
         sub_sentence_present=sub_sentence_present,
         max_text_len=args.max_text_len,
     )

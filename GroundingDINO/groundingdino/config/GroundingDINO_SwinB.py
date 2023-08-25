@@ -32,6 +32,7 @@ embed_init_tgt = True
 dn_labelbook_size = 2000
 max_text_len = 256
 text_encoder_type = "bert-base-uncased"
+text_encoder_path = None
 use_text_enhancer = True
 use_fusion_layer = True
 use_checkpoint = True
