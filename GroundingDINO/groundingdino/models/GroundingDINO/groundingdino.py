@@ -105,10 +105,12 @@ class GroundingDINO(nn.Module):
         self.dn_labelbook_size = dn_labelbook_size
 
         # bert
-        self.tokenizer = get_tokenlizer.get_tokenlizer(text_encoder_type)
+        
         if text_encoder_path is not None:
+            self.tokenizer = AutoTokenizer.from_pretrained(text_encoder_path)
             self.bert = BertModel.from_pretrained(text_encoder_path)
         else:
+            self.tokenizer = get_tokenlizer.get_tokenlizer(text_encoder_type)
             self.bert = get_tokenlizer.get_pretrained_language_model(text_encoder_type)
         self.bert.pooler.dense.weight.requires_grad_(False)
         self.bert.pooler.dense.bias.requires_grad_(False)
